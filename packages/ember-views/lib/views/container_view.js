@@ -281,7 +281,10 @@ var ContainerView = View.extend(MutableArray, {
 
   objectAt(idx) {
     return get(this, 'childViews')[idx];
-  }
+  },
+
+  // override default hook which notifies `childViews` property
+  _internalDidRender() { }
 });
 
 export default ContainerView;

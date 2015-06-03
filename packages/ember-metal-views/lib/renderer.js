@@ -75,6 +75,7 @@ Renderer.prototype.dispatchLifecycleHooks =
       }
 
       this.didRender(hook.view);
+      this.internalDidRender(hook.view);
     }
 
     ownerView._dispatching = null;
@@ -159,6 +160,10 @@ Renderer.prototype.didRender = function (view) {
   if (view.trigger) { view.trigger('didRender'); }
 };
 
+Renderer.prototype.internalDidRender = function (view) {
+  if (view.trigger) { view.trigger('_internalDidRender'); }
+};
+
 Renderer.prototype.updateAttrs = function (view, attrs) {
   this.setAttrs(view, attrs);
 }; // setting new attrs
@@ -234,7 +239,7 @@ Renderer.prototype.willDestroyElement = function (view) {
     view._transitionTo('destroying', false);
   }
 
-  var childViews = view.childViews;
+  var childViews = get(view, 'childViews');
   if (childViews) {
     for (var i = 0; i < childViews.length; i++) {
       this.willDestroyElement(childViews[i]);
@@ -253,7 +258,7 @@ Renderer.prototype.didDestroyElement = function (view) {
     view._transitionTo('preRender');
   }
 
-  var childViews = view.childViews;
+  var childViews = get(view, 'childViews');
   if (childViews) {
     for (var i = 0; i < childViews.length; i++) {
       this.didDestroyElement(childViews[i]);
